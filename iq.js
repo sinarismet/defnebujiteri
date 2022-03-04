@@ -21,7 +21,6 @@ app.post('/iq/create', function (request, res, next) {
    
     let data = "";
     try {
-        console.log("data geldi");
         let buff = Buffer.from(b_data, 'base64');
         data = buff.toString('ascii');
         var jdata = JSON.parse(data);
@@ -35,8 +34,6 @@ app.post('/iq/create', function (request, res, next) {
             },
             data: data
         };
-        console.log("istek yapıldı.");
-
         axios(config)
             .then(function (response) {
                 console.log("sending pipe : " + jdata.invoice_id);
