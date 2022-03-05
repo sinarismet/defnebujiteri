@@ -3,7 +3,7 @@ var server = require('http').Server(app);
 const axios = require('axios');
 var FormData = require('form-data');
 
-const port = 3001;
+const port = 3000;
 server.listen(port);
 const iqmoney_base_url = "https://app.iqmoneytr.com/ccpayment/";
 const iqmoney_3d_pay_url = "api/paySmart3D";
@@ -17,27 +17,26 @@ app.post('/iq/create', function (request, res, next) {
     } catch (e) {
         res.end("error" + e);
     }
-   
-   
     let data = "";
     try {
+        
         let buff = Buffer.from(b_data, 'base64');
-        data = buff.toString('ascii');
+        data = buff.toString('utf8');
+        console.log(data);
         var jdata = JSON.parse(data);
-
         var config = {
             method: 'post',
             url: 'https://app.iqmoneytr.com/ccpayment/api/paySmart3D',
             headers: {
                 'Authorization': token,
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json;charset=utf-8',
             },
             data: data
         };
         axios(config)
             .then(function (response) {
                 console.log("sending pipe : " + jdata.invoice_id);
-                res.setHeader('Content-Type', 'application/json');
+                res.setHeader('Content-Type', 'application/json;charset=utf-8');
                 res.end(response.data);
             })
             .catch(function (error) {
@@ -49,7 +48,4 @@ app.post('/iq/create', function (request, res, next) {
         console.log("UPS:.." + e);
         res.end();
     }
-
-
 });
-
